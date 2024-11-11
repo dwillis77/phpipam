@@ -313,7 +313,7 @@ class Scan extends Common_functions {
 	/**
 	 * Ping selected address and return response
 	 *
-	 *	timeout value: for miliseconds multiply by 1000
+	 *	timeout value: for milliseconds multiply by 1000
 	 *
 	 * @access protected
 	 * @param ip $address
@@ -602,6 +602,19 @@ class Scan extends Common_functions {
 			!$this->debugging ? : $this->Log->write (_("Status update"), _('Failed to update address status.'), 0 );
 		}
 	}
+
+	public function insert_mac($ip, $mac, $subnetId) {
+        // Insert a new row into the ipAddresses table with MAC address when detected via SNMP ARP scan.
+        try {
+            !$this->debugging ? : $this->Log->write ("status_update", _('Inserting mac address'), 0);
+            $this->Database->insertObject("ipaddresses", array("ip_addr"=>$ip, "mac"=>$mac, "subnetId"=>$subnetId));
+            // Return the ID of the newly-inserted row so we can use it to retrieve the row again if necessary.
+            return $this->Database->lastInsertId();
+        } catch (Exception $e) {
+            !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false);
+            !$this->debugging ? : $this->Log->write ("status_update", _('Failed to insert mac address'), 0);
+        }
+    }
 
 	/**
 	 * Update last check time for agent
