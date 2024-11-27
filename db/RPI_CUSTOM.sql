@@ -5,11 +5,12 @@ CREATE TABLE IF NOT EXISTS phpipam.rpi_custom_log(
 	objectType VARCHAR(100) NOT NULL,
 	associatedTables VARCHAR(1000) NOT NULL,
 	description VARCHAR(4000) NOT NULL,
+	dateAdded DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	idAssociations VARCHAR(4000) NOT NULL DEFAULT '[NONE]',
 	id1 INT NULL,
 	id2 INT NULL,
 	id3 INT NULL
-);
+) CHARACTER SET 'utf8mb3' COLLATE 'utf8mb3_general_ci';
 
 /* Create the trigger that will set default location on IPs to that of the IP's parent subnet, if defined */
 delimiter //
